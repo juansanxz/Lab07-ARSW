@@ -6,7 +6,7 @@
 ##### Santiago Arévalo Rojas
 ##### Juan Felipe Sánchez Pérez
 
-![mock2.png](..%2F..%2F..%2FJUANSA%7E1.LAB%2FAppData%2FLocal%2FTemp%2Fmock2.png)  
+![img.png](img.png)
 
 1. __Agregue al canvas de la página un manejador de eventos que permita capturar los 'clicks' realizados, bien sea a través del mouse, o a través de una pantalla táctil. Para esto, tenga en cuenta [este ejemplo de uso de los eventos de tipo 'PointerEvent'](https://mobiforge.com/design-development/html5-pointer-events-api-combining-touch-mouse-and-pen) (aún no soportado por todos los navegadores) para este fin. Recuerde que a diferencia del ejemplo anterior (donde el código JS está incrustado en la vista), se espera tener la inicialización de los manejadores de eventos correctamente modularizado, tal [como se muestra en este codepen](https://codepen.io/hcadavid/pen/BwWbrw).__
 
