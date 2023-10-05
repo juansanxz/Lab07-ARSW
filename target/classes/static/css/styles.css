@@ -1,0 +1,11 @@
+.panel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+    gap: 20px; /* Espacio entre las columnas */
+}
+
+/* Estilo para los divs internos */
+#authorInformation, #bpCanvas {
+    padding: 10px; /* Espacio interno */
+}
+
