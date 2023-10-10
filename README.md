@@ -6,20 +6,20 @@
 ##### Santiago Arévalo Rojas
 ##### Juan Felipe Sánchez Pérez
 
-![img.png](img.png)
+![img.png](img/img.png)
 
 1. __Agregue al canvas de la página un manejador de eventos que permita capturar los 'clicks' realizados, bien sea a través del mouse, o a través de una pantalla táctil. Para esto, tenga en cuenta [este ejemplo de uso de los eventos de tipo 'PointerEvent'](https://mobiforge.com/design-development/html5-pointer-events-api-combining-touch-mouse-and-pen) (aún no soportado por todos los navegadores) para este fin. Recuerde que a diferencia del ejemplo anterior (donde el código JS está incrustado en la vista), se espera tener la inicialización de los manejadores de eventos correctamente modularizado, tal [como se muestra en este codepen](https://codepen.io/hcadavid/pen/BwWbrw).__  
    Se agrega el manejador de evento al canvas y por ahora simplemente se muestra en que coordenadas se hizo click, con el fin de verificar su correcto funcionamiento:
-   ![img_1.png](img_1.png)
+   ![img_1.png](img/img_1.png)
 
 
 2. __Agregue lo que haga falta en sus módulos para que cuando se capturen nuevos puntos en el canvas abierto (si no se ha seleccionado un canvas NO se debe hacer nada):__
     1. __Se agregue el punto al final de la secuencia de puntos del canvas actual (sólo en la memoria de la aplicación, AÚN NO EN EL API!).__
     2. __Se repinte el dibujo.__  
    La funcionalidad fue implementada, a continuación se evidencia un blueprint en su estado original:  
-   ![img_2.png](img_2.png)  
+   ![img_2.png](img/img_2.png)  
    Luego de hacer varios clicks, se muestran los nuevos puntos dibujados:  
-   ![img_3.png](img_3.png)  
+   ![img_3.png](img/img_3.png)  
 
 3. __Agregue el botón Save/Update. Respetando la arquitectura de módulos actual del cliente, haga que al oprimirse el botón:__
     1. __Se haga PUT al API, con el plano actualizado, en su recurso REST correspondiente.__
@@ -46,11 +46,11 @@
    ```
     * __Como en este caso se tienen tres operaciones basadas en _callbacks_, y que las mismas requieren realizarse en un orden específico, tenga en cuenta cómo usar las promesas de JavaScript [mediante alguno de los ejemplos disponibles](http://codepen.io/hcadavid/pen/jrwdgK).__  
    Se añadió el botón solicitado para actualizar y guardar los nuevos puntos del plano correspondiente, para esto se creó una función en el apiclient por medio de ajax para hacer la solicitud PUT, luego en el app se creó una función con promesas encadenadas en la cual primero se llama a la función encargada de realizar el PUT y una vez haya finalizado se vuelve a hacer el GET y actualiza la vista. Podemos observar su funcionamiento, abrimos un blueprint:  
-   ![img_4.png](img_4.png)  
+   ![img_4.png](img/img_4.png)  
    Luego agregamos 3 puntos nuevos:
-   ![img_5.png](img_5.png)  
+   ![img_5.png](img/img_5.png)  
    Seguido a esto seleccionamos el botón de "Save/Update" y evidenciamos que la información es actualizada:  
-   ![img_6.png](img_6.png)  
+   ![img_6.png](img/img_6.png)  
 
 4. __Agregue el botón 'Create new blueprint', de manera que cuando se oprima:__
     * __Se borre el canvas actual.__
@@ -61,19 +61,19 @@
     1. __Hacer POST al recurso /blueprints, para crear el nuevo plano.__
     2. __Hacer GET a este mismo recurso, para actualizar el listado de planos y el puntaje del usuario.__  
    Se agrega el botón de crear un blueprint, dicho botón solo aparece una vez se haya buscado un autor, así se ve la página apenas se ingresa:  
-   ![img_7.png](img_7.png)  
+   ![img_7.png](img/img_7.png)  
    Luego al buscar un autor aparece el botón de crear:  
-   ![img_8.png](img_8.png)  
+   ![img_8.png](img/img_8.png)  
    Procedemos a entrar a un cualquier blueprint para evidenciar que cuando se crea uno nuevo se pone este en edición de forma automática:  
-   ![img_9.png](img_9.png)  
+   ![img_9.png](img/img_9.png)  
    Seleccionamos en crear nuevo, en donde nos solicita el nombre del plano:  
-   ![img_10.png](img_10.png)  
+   ![img_10.png](img/img_10.png)  
    Y se le informa al usuario que el plano fue creado de manera exitosa:  
-   ![img_11.png](img_11.png)  
+   ![img_11.png](img/img_11.png)  
    Y luego se pone toda la información del blueprint "prueba" de forma automática para su edición:  
-   ![img_12.png](img_12.png)  
+   ![img_12.png](img/img_12.png)  
    Para finalizar, se agregan puntos para probar el correcto funcionamiento:  
-   ![img_13.png](img_13.png)  
+   ![img_13.png](img/img_13.png)  
    
 
 5. __Agregue el botón 'DELETE', de manera que (también con promesas):__
@@ -81,9 +81,9 @@
     * __Haga DELETE del recurso correspondiente.__
     * __Haga GET de los planos ahora disponibles.__  
    Se agrega la funcionalidad al botón delete de cada plano para que al eliminarse se actualice de manera automática toda la información del autor, de la misma forma, cuando se elimina no se deja un blueprint por defecto, sino que se deja vacío, limpiando el canvas y quitando el nombre. En este caso se eliminará el plano de Centro Comercial Santafe:  
-   ![img_14.png](img_14.png)  
+   ![img_14.png](img/img_14.png)  
    Al seleccionar el botón de eliminar se evidencia el correcto funcionamiento:  
-   ![img_15.png](img_15.png)  
+   ![img_15.png](img/img_15.png)  
    
 
 ### Criterios de evaluación
