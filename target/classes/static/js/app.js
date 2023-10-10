@@ -3,12 +3,29 @@ var blueprintsModule = (function()  {
     var bps;
     var currentBp;
     var currentModule = apiclient;
+    var tempPoints;
+
+    putBlueprints =  function() {
+        return currentModule.putBlueprintsUpdates(author, currentBp.name, JSON.stringify(tempPoints));
+    };
+
+    createBlueprint = function(bpName) {
+        var newBp = {"author":author,"points":[],"name":bpName};
+        return currentModule.postBlueprintsUpdates(JSON.stringify(newBp));
+    };
+
+    deleteBlueprint = function() {
+        return currentModule.deleteBlueprint(author, currentBp.name);
+    };
 
     return {
       setAuthor: function(newAuthor) {
         author = newAuthor;
         blueprintsModule.setBpsByAuthor(author);
         $("#authorNameText").text("Name of Author: " + author);
+        $("#newButton").remove();
+        var newButton = $("<button id='newButton' type='button' onclick='blueprintsModule.chainedPromisesToCreate();'>Create New Blueprint</button>");
+        $("#newBpDiv").append(newButton);
       },
 
       getAuthor: function() {
@@ -29,7 +46,7 @@ var blueprintsModule = (function()  {
                 var newRow = $("<tr>");
                 newRow.append("<td>" + bp.name + "</td>");
                 newRow.append("<td>" + bp.numPoints + "</td>");
-                newRow.append("<td><button onclick='blueprintsModule.paintBp(this); blueprintsModule.getClicks();'>Open</button></td>");
+                newRow.append("<td><button onclick='blueprintsModule.loadBlueprintsModuleFunctions(this);'>Open</button></td>");
                 newRow.append("</tr>");
                 return newRow;
             });
@@ -41,7 +58,6 @@ var blueprintsModule = (function()  {
 
             $("#totalUserPoints").text("Total user points: " + pointsNumber);
         });
-
 
       },
 
@@ -72,21 +88,114 @@ var blueprintsModule = (function()  {
             }
             $("#bpNameText").text("Current Blueprint: " + bpName);
         });
-
       },
 
-      getClicks: function(){
+      getClicks: function(buttonElement){
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
+        var points = currentBp.points;
+        var pointToAdd;
+        var canvasRect = canvas.getBoundingClientRect();
         if(window.PointerEvent) {
             canvas.addEventListener("pointerdown", function(event){
-                alert('pointerdown at '+event.pageX+','+event.pageY);
+                pointToAdd = {"x":event.pageX - canvasRect.left, "y":event.pageY - canvasRect.top};
+                points.push(pointToAdd);
+                tempPoints = points;
+                blueprintsModule.fakePaintBp(points);
             });
         } else {
             canvas.addEventListener("mousedown", function(event){
-                alert('mousedown at '+event.clientX+','+event.clientY);
+                pointToAdd = {"x":event.clientX  - canvasRect.left,"y":event.clientY  - canvasRect.top};
+                points.push(pointToAdd);
+                tempPoints = points;
+                blueprintsModule.fakePaintBp(points);
             });
         }
+        $("#saveButton").remove();
+        var newButton = $("<button id='saveButton' type='button' onclick='blueprintsModule.chainedPromises();'>Save/Update</button>");
+        $("#buttonDiv").append(newButton);
+        $("#deleteButton").remove();
+        var newDelButton = $("<button id='deleteButton' type='button' onclick='blueprintsModule.chainedPromisesToDelete();'>Delete</button>");
+        $("#buttonDiv").append(newDelButton);
+      },
+
+      loadBlueprintsModuleFunctions: function(buttonElement) {
+        // Llama a blueprintsModule.paintBp
+        blueprintsModule.paintBp(buttonElement);
+
+        // Espera un tiempo (ajusta esto según tus necesidades)
+        setTimeout(function() {
+          // Llama a blueprintsModule.getClicks después de blueprintsModule.paintBp
+          blueprintsModule.getClicks(buttonElement);
+        }, 1000); // Espera 1 segundo (ajusta este tiempo según sea necesario)
+      },
+
+      fakePaintBp: function(points) {
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        var currentPoint;
+        var nextPoint;
+        for (var i = 0; i < points.length - 1; i++) {
+            if (points.length == 1) {
+                currentPoint = points[i];
+                nextPoint = currentPoint;
+            } else {
+                currentPoint = points[i];
+                nextPoint = points[i + 1];
+            }
+            ctx.beginPath();
+            ctx.moveTo(currentPoint.x, currentPoint.y);
+            ctx.lineTo(nextPoint.x ,nextPoint.y);
+            ctx.stroke();
+            ctx.closePath();
+        }
+      },
+
+      chainedPromises: function() {
+        putBlueprints().then(function() {
+            blueprintsModule.setAuthor(author);
+          });
+      },
+
+      chainedPromisesToCreate: function() {
+        var answer = prompt("Please, type the blueprint's name: ");
+          // Verifica si el usuario ingresó un valor y maneja la respuesta
+        if (answer !== null) {
+            alert("The " + answer + " blueprint was created!");
+            createBlueprint(answer).then(function() {
+                return blueprintsModule.setBpsByAuthor(author);
+            }).then(function() {
+                setTimeout(function() {
+                    var newRow = $("#blueprintTable tr").filter(function() {
+                        var bpValue = $(this).find("td:first").text();
+                        return bpValue === answer;
+                    });
+                    var newButton = newRow.find("button");
+                    blueprintsModule.loadBlueprintsModuleFunctions(newButton);
+                }, 1000);
+            });
+        } else {
+            alert("You didn't type the name.");
+        }
+      },
+
+      chainedPromisesToDelete: function() {
+        deleteBlueprint().then(function() {
+            blueprintsModule.setAuthor(author);
+        }).then(function() {
+            $("#saveButton").remove();
+            $("#deleteButton").remove();
+            currentBp = null;
+            tempPoints = null;
+            var canvas = document.getElementById("myCanvas");
+            var ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            $("#bpNameText").text("Current Blueprint: ");
+            canvas.onclick = null;
+            canvas.onmousedown = null;
+            canvas.onpointerdown = null;
+        });
       }
     }
 })();

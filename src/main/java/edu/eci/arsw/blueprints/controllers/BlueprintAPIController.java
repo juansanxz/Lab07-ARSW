@@ -94,5 +94,18 @@ public class BlueprintAPIController {
 
     }
 
+    @RequestMapping(path = "/{author}/{bpname}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteHandleResourceBp(@PathVariable String author, @PathVariable String bpname){
+        try {
+            //registrar dato
+            bps.deleteBlueprint(author, bpname);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (BlueprintNotFoundException ex) {
+            Logger.getLogger(BlueprintAPIController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>("The blueprint doesn't exist",HttpStatus.NOT_FOUND);
+        }
+
+    }
+
 }
 

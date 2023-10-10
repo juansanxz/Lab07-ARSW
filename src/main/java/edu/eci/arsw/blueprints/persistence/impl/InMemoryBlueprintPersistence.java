@@ -38,9 +38,17 @@ public class InMemoryBlueprintPersistence implements BlueprintsPersistence{
         Blueprint bp3=new Blueprint("Juan", "Centro Comercial Colina",pts3);
         blueprints.put(new Tuple<>(bp3.getAuthor(),bp3.getName()), bp3);
 
+        Point[] pts5=new Point[]{new Point(120, 40),new Point(39, 15)};
+        Blueprint bp5=new Blueprint("Juan", "Cafeteria",pts5);
+        blueprints.put(new Tuple<>(bp5.getAuthor(),bp5.getName()), bp5);
+
         Point[] pts4=new Point[]{new Point(168, 410),new Point(119, 58)};
         Blueprint bp4=new Blueprint("Julieta", "Centro Comercial Galerias",pts4);
         blueprints.put(new Tuple<>(bp4.getAuthor(),bp4.getName()), bp4);
+
+        Point[] pts6=new Point[]{new Point(20, 140),new Point(139, 125)};
+        Blueprint bp6=new Blueprint("Julieta", "Restaurante",pts6);
+        blueprints.put(new Tuple<>(bp6.getAuthor(),bp6.getName()), bp6);
     }    
     
     @Override
@@ -91,6 +99,16 @@ public class InMemoryBlueprintPersistence implements BlueprintsPersistence{
         }
         else{
             blueprints.get(new Tuple<>(author,bpname)).setPoints(points);
+        }
+    }
+
+    @Override
+    public void deleteBlueprint (String author, String bpname) throws BlueprintNotFoundException {
+        if (!blueprints.containsKey(new Tuple<>(author,bpname))){
+            throw new BlueprintNotFoundException("The given blueprint " + bpname + " from " + author + " doesn't exist.");
+        }
+        else{
+            blueprints.remove(new Tuple<>(author,bpname));
         }
     }
     
